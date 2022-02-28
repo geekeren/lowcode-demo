@@ -1,7 +1,8 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const webpack = require('webpack');
 module.exports = ({ onGetWebpackConfig }) => {
   onGetWebpackConfig((config) => {
     config.resolve.plugin('tsconfigpaths').use(TsconfigPathsPlugin, [
@@ -21,6 +22,42 @@ module.exports = ({ onGetWebpackConfig }) => {
         preview: require.resolve('./src/preview.tsx'),
       },
     });
+    config.merge({
+      output: {
+        "filename": "[name]-[hash:8].js"
+      },
+    });
+    config.merge({
+      optimization: {
+        namedModules: true,
+        namedChunks: true,
+        nodeEnv: 'production',
+        flagIncludedChunks: true,
+        occurrenceOrder: true,
+        sideEffects: true,
+        usedExports: true,
+        concatenateModules: true,
+        splitChunks: {
+          chunks: 'all',
+          maxInitialRequests: Infinity,
+          minSize: 100,
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name(module) {
+                const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                return `npm.${packageName.replace('@', '')}`;
+              },
+            },
+          },
+        },
+        noEmitOnErrors: true,
+        minimize: true, 
+        removeAvailableModules: true,
+        removeEmptyChunks: true,
+        mergeDuplicateChunks: true,  
+      }
+    })
     config
       .plugin('index')
       .use(HtmlWebpackPlugin, [
@@ -43,7 +80,7 @@ module.exports = ({ onGetWebpackConfig }) => {
           filename: 'preview.html',
         },
       ]);
-
+    config.plugin('index').use(BundleAnalyzerPlugin);
     config.plugins.delete('hot');
     config.devServer.hot(false);
 
