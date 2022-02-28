@@ -80,7 +80,7 @@ module.exports = ({ onGetWebpackConfig }) => {
           filename: 'preview.html',
         },
       ]);
-    config.plugin('index').use(BundleAnalyzerPlugin);
+  //  config.plugin('index').use(BundleAnalyzerPlugin);
     config.plugins.delete('hot');
     config.devServer.hot(false);
 
