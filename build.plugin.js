@@ -1,7 +1,7 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const webpack = require('webpack');
 module.exports = ({ onGetWebpackConfig }) => {
   onGetWebpackConfig((config) => {
@@ -45,7 +45,11 @@ module.exports = ({ onGetWebpackConfig }) => {
             vendor: {
               test: /[\\/]node_modules[\\/]/,
               name(module) {
+                // get the name. E.g. node_modules/packageName/not/this/part.js
+                // or node_modules/packageName
                 const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+    
+                // npm package names are URL-safe, but some servers don't like @ symbols
                 return `npm.${packageName.replace('@', '')}`;
               },
             },
@@ -69,6 +73,7 @@ module.exports = ({ onGetWebpackConfig }) => {
           filename: 'index.html',
         },
       ]);
+    config.plugin('index').use(WebpackManifestPlugin, [{}]);
     config
       .plugin('preview')
       .use(HtmlWebpackPlugin, [
@@ -80,7 +85,7 @@ module.exports = ({ onGetWebpackConfig }) => {
           filename: 'preview.html',
         },
       ]);
-  //  config.plugin('index').use(BundleAnalyzerPlugin);
+    // config.plugin('index').use(BundleAnalyzerPlugin);
     config.plugins.delete('hot');
     config.devServer.hot(false);
 

@@ -2,7 +2,7 @@
   "entry": {
     "index": "src/index"
   },
-  "vendor": false,
+  "vendor": true,
   "devServer": {
     "hot": false
   },
