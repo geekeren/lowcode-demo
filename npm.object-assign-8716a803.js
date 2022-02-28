@@ -1,0 +1,6 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["npm.object-assign"],{"./node_modules/object-assign/index.js":function(e,n,r){"use strict";
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/var t=Object.getOwnPropertySymbols,o=Object.prototype.hasOwnProperty,c=Object.prototype.propertyIsEnumerable;function i(e){if(null==e)throw new TypeError("Object.assign cannot be called with null or undefined");return Object(e)}function a(){try{if(!Object.assign)return!1;var e=new String("abc"),n;if(e[5]="de","5"===Object.getOwnPropertyNames(e)[0])return!1;for(var r={},t=0;t<10;t++)r["_"+String.fromCharCode(t)]=t;if("0123456789"!==Object.getOwnPropertyNames(r).map((function(e){return r[e]})).join(""))return!1;var o={};return"abcdefghijklmnopqrst".split("").forEach((function(e){o[e]=e})),"abcdefghijklmnopqrst"===Object.keys(Object.assign({},o)).join("")}catch(e){return!1}}e.exports=a()?Object.assign:function(e,n){for(var r,a=i(e),s,b=1;b<arguments.length;b++){for(var p in r=Object(arguments[b]))o.call(r,p)&&(a[p]=r[p]);if(t){s=t(r);for(var u=0;u<s.length;u++)c.call(r,s[u])&&(a[s[u]]=r[s[u]])}}return a}}}]);
